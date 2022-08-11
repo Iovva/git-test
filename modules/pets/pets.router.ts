@@ -5,6 +5,7 @@ const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
   const { statusCode, body } = await PetsController.getPets(req)
+  console.log("AMAZING FEATURE!!!")
   res.status(statusCode).send(body)
 })
 
