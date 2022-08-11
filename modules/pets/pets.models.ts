@@ -28,7 +28,3 @@ export interface NewPet {
   species: string
 }
 
-export interface badInterace{
-  name: number
-  familyName?: null
-}
