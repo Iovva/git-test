@@ -28,6 +28,7 @@ export interface NewPet {
   species: string
 }
 
+
 export interface goodInterace{
   name: string
   familyName: string
