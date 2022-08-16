@@ -20,13 +20,14 @@ export default class PetsService {
 
   public static async addPet(petDetails: AddPetBody): Promise<ControllerResponse<IPetModel | ControllerError>> {
     const { name, owner, species } = petDetails
-    
-    /*
+
+        
+    // one pet per owner!!!!
     const existingPet = await PetsDal.getPetByOwner(owner)
     if (existingPet) {
       return ResponseFactory.createBadRequestError('A pet with this owner already exists')
     }
-    */
+
 
     const newPet = await PetsDal.addNewPet({ name, owner, species})
 
@@ -49,6 +50,37 @@ export default class PetsService {
     const { name, owner, species } = petDetails
 
     const newPet = await PetsDal.patchPet({ name, owner, species}, petId)
+
+    if (newPet) {
+      return ResponseFactory.createResponse(newPet)
+    }
+
+    return ResponseFactory.createInternalServerError()
+  }
+
+  public static async loginPet(petDetails: AddPetBody): Promise<ControllerResponse<IPetModel | ControllerError>> {
+    const { name, owner, species } = petDetails
+
+
+    const newPet = await PetsDal.loginPet({ name, owner, species})
+
+    if (newPet) {
+      return ResponseFactory.createResponse(newPet)
+    }
+
+    return ResponseFactory.createInternalServerError()
+  }
+
+  public static async regiterPet(petDetails: AddPetBody): Promise<ControllerResponse<IPetModel | ControllerError>> {
+    const { name, owner, species } = petDetails
+
+    // one pet per owner!!!!
+    const existingPet = await PetsDal.getPetByOwner(owner)
+    if (existingPet) {
+      return ResponseFactory.createBadRequestError('A pet with this owner already exists')
+    }
+
+    const newPet = await PetsDal.registerPet({ name, owner, species})
 
     if (newPet) {
       return ResponseFactory.createResponse(newPet)

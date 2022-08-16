@@ -31,4 +31,14 @@ router.patch('/:petId', async (req: Request, res: Response) => {
   res.status(statusCode).send(body)
 })
 
+router.post('/login', async (req: Request, res: Response) => {
+  const { statusCode, body } = await PetsController.loginPet(req, req.body)
+  res.status(statusCode).send(body)
+})
+
+router.post('/register', async (req: Request, res: Response) => {
+  const { statusCode, body } = await PetsController.registerPet(req, req.body)
+  res.status(statusCode).send(body)
+})
+
 export default router

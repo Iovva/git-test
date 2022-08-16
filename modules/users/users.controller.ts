@@ -46,4 +46,6 @@ export default class UsersController {
   ): Promise<ControllerResponse<UserModel | ControllerError>> {
     return await UsersService.addUser(userDetails)
   }
+
+
 }

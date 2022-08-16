@@ -6,6 +6,9 @@ import 'dotenv/config'
 
 const app = express()
 
+import mongoose from 'mongoose'
+mongoose.connect('mongodb://127.0.0.1/db').then(() => console.log("Connected to the database!"));
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
