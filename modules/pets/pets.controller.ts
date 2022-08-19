@@ -67,4 +67,24 @@ export default class PetsController {
   ): Promise<ControllerResponse<IPetModel | ControllerError>> {
     return await PetsService.patchPet(petDetails, petId)
   }
+
+  @Post('/login')
+  @Response<{ message: ErrorMessageCode.BAD_REQUEST }>(400, 'Bad Request')
+  @Response<{ message: ErrorMessageCode.INTERNAL_SERVER_ERROR }>(500, 'Server Error')
+  public static async loginPet(
+    @Request() _request: ExpressRequest,
+    @Body() petDetails: AddPetBody
+  ): Promise<ControllerResponse<IPetModel | ControllerError>> {
+    return await PetsService.loginPet(petDetails)
+  }
+
+  @Post('/register')
+  @Response<{ message: ErrorMessageCode.BAD_REQUEST }>(400, 'Bad Request')
+  @Response<{ message: ErrorMessageCode.INTERNAL_SERVER_ERROR }>(500, 'Server Error')
+  public static async registerPet(
+    @Request() _request: ExpressRequest,
+    @Body() petDetails: AddPetBody
+  ): Promise<ControllerResponse<IPetModel | ControllerError>> {
+    return await PetsService.regiterPet(petDetails)
+  }
 }

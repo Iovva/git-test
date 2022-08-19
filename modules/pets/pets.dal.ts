@@ -5,6 +5,7 @@ import crypto from "crypto";
 import { NewPet, Species, PetModel, IPetModel } from "./pets.models";
 import { ExceptionSafe, dalExceptionHandler } from "../../toolkit";
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 // Mocked Data
 
@@ -23,7 +24,6 @@ const Pets = [
   },
 ];
 
-mongoose.connect('mongodb://127.0.0.1/db').then(() => console.log("Connected to the database!"));
 
 const Schema = mongoose.Schema;
 const petsDataSchema = new Schema<IPetModel>({
@@ -34,6 +34,7 @@ const petsDataSchema = new Schema<IPetModel>({
 
 const PetsData = mongoose.model('pet', petsDataSchema);
 
+const saltRounds = 10;
 
 @ExceptionSafe(dalExceptionHandler)
 export default class PetsDal {
@@ -42,7 +43,7 @@ export default class PetsDal {
   public static async getPetsList(): Promise<IPetModel[]> {
     const pets = await  PetsData.find({});
     console.log(pets);
-  
+
     return pets
   }
 
@@ -79,5 +80,29 @@ export default class PetsDal {
       return pet;
     }
     return null
+  }
+
+  public static async loginPet(petDetails: IPetModel): Promise<IPetModel | null> {
+    const petInDatabase = await PetsData.findOne({owner: petDetails.owner});
+    let result = false;
+    if (petInDatabase) 
+      result = await bcrypt.compare(petDetails.species, petInDatabase.species);
+    if (result === true)
+      return petDetails;
+    return null;
+  }
+
+  public static async registerPet(petDetails: IPetModel): Promise<IPetModel | null> {
+    let result;
+    try {
+      const hash = await bcrypt.hash(petDetails.species, saltRounds);
+      petDetails.species = hash;
+      const pet = new PetsData(petDetails)
+      result = await pet.save();
+
+      return result;
+    } catch (Error){
+      return null;
+    }
   }
 }

@@ -35,4 +35,5 @@ export default class UsersService {
 
     return ResponseFactory.createInternalServerError()
   }
+
 }
